@@ -2,7 +2,6 @@ import Foundation
 import UIKit
 import SwiftData
 import UniformTypeIdentifiers
-import Compression
 
 struct RecipeExporter {
     static func exportRecipes(_ recipes: [Recipe]) -> URL? {
@@ -41,9 +40,6 @@ struct RecipeExporter {
                     try imageData.write(to: imageURL)
                 }
             }
-            
-            // ZIP mit Archive API erstellen (iOS-kompatibel)
-            let zipURL = tempDir.appendingPathComponent("Rezepte_\(Date().timeIntervalSince1970).zip")
             
             // Da iOS keine native ZIP-Erstellung ohne externe Bibliothek unterstützt,
             // verwenden wir einen Fallback: Exportverzeichnis direkt teilen

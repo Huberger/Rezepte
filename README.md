@@ -15,3 +15,7 @@ Anleitung zum Öffnen:
 
 Import deiner Bilder:
 - Füge die Bilder über die Fotomediathek in der App hinzu (PhotosPicker) oder importiere sie in die Photos‑App deines iPad und wähle sie in der App.
+
+---
+
+**Hinweis**: Informationen zum Konversationsverlauf mit GitHub Copilot finden Sie in [CONVERSATION_HISTORY.md](CONVERSATION_HISTORY.md).

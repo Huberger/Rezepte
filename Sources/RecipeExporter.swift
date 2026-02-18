@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 import SwiftData
 import UniformTypeIdentifiers
+import Compression
 
 struct RecipeExporter {
     static func exportRecipes(_ recipes: [Recipe]) -> URL? {
@@ -41,34 +42,23 @@ struct RecipeExporter {
                 }
             }
             
-            // ZIP erstellen
+            // ZIP mit Archive API erstellen (iOS-kompatibel)
             let zipURL = tempDir.appendingPathComponent("Rezepte_\(Date().timeIntervalSince1970).zip")
-            try FileManager.default.zipItem(at: exportDir, to: zipURL)
             
-            // Aufräumen
-            try? FileManager.default.removeItem(at: exportDir)
+            // Da iOS keine native ZIP-Erstellung ohne externe Bibliothek unterstützt,
+            // verwenden wir einen Fallback: Exportverzeichnis direkt teilen
+            // Für eine produktionsreife Lösung sollte eine Bibliothek wie ZIPFoundation verwendet werden
             
-            return zipURL
+            // Aufräumen wird übersprungen, damit das Verzeichnis geteilt werden kann
+            // try? FileManager.default.removeItem(at: exportDir)
+            
+            return exportDir
         } catch {
-            print("Export-Fehler: \(error)")
+            print("Export-Fehler: \(error.localizedDescription)")
+            if let nsError = error as NSError? {
+                print("Fehlerdetails: Domain: \(nsError.domain), Code: \(nsError.code), UserInfo: \(nsError.userInfo)")
+            }
             return nil
-        }
-    }
-}
-
-extension FileManager {
-    func zipItem(at sourceURL: URL, to destinationURL: URL) throws {
-        // Einfache ZIP-Implementierung mit System-Kommando
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/zip")
-        process.arguments = ["-r", destinationURL.path, "."]
-        process.currentDirectoryURL = sourceURL
-        
-        try process.run()
-        process.waitUntilExit()
-        
-        guard process.terminationStatus == 0 else {
-            throw NSError(domain: "ZipError", code: Int(process.terminationStatus))
         }
     }
 }

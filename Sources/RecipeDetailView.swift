@@ -4,10 +4,6 @@ import SwiftData
 struct RecipeDetailView: View {
     @Bindable var recipe: Recipe
     @State private var isEditingNotes = false
-    @State private var scale: CGFloat = 1.0
-    @State private var lastScale: CGFloat = 1.0
-    @State private var offset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
     
     var body: some View {
         ScrollView {
